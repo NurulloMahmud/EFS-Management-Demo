@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  <title>Form</title>
+{% endblock title %}    
+ 
+{% block content %}
+
+<div class="container">
+    <h5>
+        <br>
+        Money Tranfer Code: <b>{{ code }}</b> <br>
+        Reference: <b>{{ reference }}</b> <br>
+        Amount: <b> ${{ amount }}</b>
+    </h5>
+</div>
+<hr>
+<div class="container">
+  <form method="post">
+    {% csrf_token %}
+    
+    <input type="hidden" name="code" value="{{ code }}">
+    <input type="hidden" name="reference" value="{{ reference }}">
+
+    <label for="amount">Amount</label>
+    <input type="text" id="amount" name="amount" placeholder="How much are you giving ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <label for="reason">Reason</label>
+    <input type="reason" id="reason" name="reason" placeholder="Write a reason" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <label for="expense">Expense</label>
+    <input type="expense" id="expense" name="expense" placeholder="Who'se expense is it ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <br>
+    <div class="form-check form-switch">
+      <input class="form-check-input" id="fee" name="fee" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+      <label class="form-check-label" for="flexSwitchCheckDefault">Add Fee</label>
+    </div>
+    <br><button class="btn btn-primary" type="submit">Submit</button>
+  </form>
+</div>
+  {% endblock content %}

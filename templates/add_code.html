@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>
+    Add EFS
+  </title>
+{% endblock title %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <label for="text">Money Code:</label><br>
+        <input type="text" id="code" name="code"><br><br>
+
+        <label for="text">Reference:</label><br>
+        <input type="text" id="reference" name="reference"><br><br>
+
+        <label for="text">Amount:</label><br>
+        <input type="text" id="amount" name="amount"><br><br>
+
+
+        <input type="submit" value="Add Code">
+    </form>
+{% endblock %}

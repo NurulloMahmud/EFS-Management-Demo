@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Homepage</title>
+{% endblock title %}
+
+
+{% block content %}
+<div class="container">
+<div class="container">
+  <div class="container">
+    <div class="d-grid gap-2 d-md-block">
+        <a href="{% url 'add_message' %}"><button class="btn btn-primary" type="button">Add Note</button></a>
+      </div>
+      <br><br>
+<div class="card">
+    <h2 class="card-header text-center">Important Notes</h2>
+    <div class="card-body">
+        {% for message in messages %}
+        <h4 class="card-title">{{ message.msg }}</h4>
+        <p class="card-text">{{ message.user }}.</p>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+{% endblock content %}
+
+<div class="container-fluid">
+    {% for message in messages %}
+    <figure>
+        <blockquote class="blockquote">
+          <p>{{ message.msg }}</p>
+        </blockquote>
+        <figcaption class="blockquote-footer">
+          <cite title="Source Title">{{ message.user }}</cite>
+        </figcaption>
+      </figure>
+      {% endfor %}
+</div>

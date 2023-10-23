@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>
+    Add Note
+  </title>
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+<div class="container">
+    <div class="container">
+
+        <form method="post" aria-autocomplete="none">
+            {% csrf_token %}
+            <div class="container-fluid"><label for="text"><b>Message</b></label></div><br>
+            <input type="text" id="message" name="message" placeholder="Do not give efs for cash advance" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            <br><button class="btn btn-primary" type="submit">Add</button>
+          </form>
+      
+</div>
+</div>
+</div>
+
+{% endblock %}

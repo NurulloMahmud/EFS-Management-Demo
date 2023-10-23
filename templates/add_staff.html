@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="container">
+<form method="post">
+    {% csrf_token %}
+    
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" placeholder="Unique username" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <label for="reason">Password</label>
+    <input type="password" id="password" name="password" placeholder="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <label for="department">Department</label>
+    <input type="department" id="department" name="department" placeholder="accounting/maintenance/management" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <label for="first_name">First Name</label>
+    <input type="first_name" id="first_name" name="first_name" placeholder="first name" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <label for="last_name">Last Name</label>
+    <input type="last_name" id="last_name" name="last_name" placeholder="last name" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+
+    <br>
+    <br><button class="btn btn-primary" type="submit">Submit</button>
+</form>
+</div>
+</div>
+
+{% endblock content %}

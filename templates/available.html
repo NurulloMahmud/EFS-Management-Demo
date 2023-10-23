@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  <title>Available codes</title>
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+<div class="container">
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $50</h5>
+                <p class="card-text">Available qty: {{ counts.50 }}.</p>
+                {% if counts.50 > 0 %}
+                    <a href="{% url 'form' amount=50 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $100</h5>
+                <p class="card-text">Available qty: {{ counts.100 }}.</p>
+                {% if counts.100 > 0 %}
+                    <a href="{% url 'form' amount=100 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $200</h5>
+                <p class="card-text">Available qty: {{ counts.200 }}.</p>
+                {% if counts.200 > 0 %}
+                    <a href="{% url 'form' amount=200 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $300</h5>
+                <p class="card-text">Available qty: {{ counts.300 }}.</p>
+                {% if counts.300 > 0 %}
+                    <a href="{% url 'form' amount=300 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $400</h5>
+                <p class="card-text">Available qty: {{ counts.400 }}.</p>
+                {% if counts.400 > 0 %}
+                    <a href="{% url 'form' amount=400 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $500</h5>
+                <p class="card-text">Available qty: {{ counts.500 }}.</p>
+                {% if counts.500 > 0 %}
+                    <a href="{% url 'form' amount=500 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $600</h5>
+                <p class="card-text">Available qty: {{ counts.600 }}.</p>
+                {% if counts.600 > 0 %}
+                    <a href="{% url 'form' amount=600 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $700</h5>
+                <p class="card-text">Available qty: {{ counts.700 }}.</p>
+                {% if counts.700 > 0 %}
+                    <a href="{% url 'form' amount=700 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Amount: $800</h5>
+                <p class="card-text">Available qty: {{ counts.800 }}.</p>
+                {% if counts.800 > 0 %}
+                    <a href="{% url 'form' amount=800 %}" class="btn btn-primary">Get one</a>
+                {% else %}
+                    <a href="#" class="btn btn-secondary">Get one</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock content %}
