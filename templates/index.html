@@ -26,16 +26,3 @@
 </div>
 </div>
 {% endblock content %}
-
-<div class="container-fluid">
-    {% for message in messages %}
-    <figure>
-        <blockquote class="blockquote">
-          <p>{{ message.msg }}</p>
-        </blockquote>
-        <figcaption class="blockquote-footer">
-          <cite title="Source Title">{{ message.user }}</cite>
-        </figcaption>
-      </figure>
-      {% endfor %}
-</div>

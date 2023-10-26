@@ -7,16 +7,21 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Role(models.Model):
+class Department(models.Model):
+    """
+        management = 1 | maintenance = 2 | accounting = 3
+    """
     name = models.CharField(max_length=20)
 
     def __str__(self) -> str:
         return self.name
 
-
-class UserRole(models.Model):
+class UserDepartment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return str(self.user.get_username()) + ' -> ' + str(self.department.name)
 
 
 class Message(models.Model):

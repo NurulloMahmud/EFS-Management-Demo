@@ -17,10 +17,18 @@
         <div class="container-fluid">
             <div class="navbar-nav">
               <a class="nav-link" href="{% url 'home' %}">Home</a>
-              <a class="nav-link" href="{% url 'available' %}">Available</a>
+
+              {% if department == 'maintenance' or department == 'management' %}
+                  <a class="nav-link" href="{% url 'available' %}">Available</a>
+              {% endif %}
+              
               <a class="nav-link" href="{% url 'used' %}">Used</a>
-              <a class="nav-link" href="{% url 'activity' %}">Activity log</a>
-              <a class="nav-link" href="{% url 'staff' %}">Staff</a>
+              
+              {% if department == 'management' %}
+                  <a class="nav-link" href="{% url 'activity' %}">Activity log</a>
+                  <a class="nav-link" href="{% url 'staff' %}">Staff</a>
+              {% endif %}
+              
               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
               <a class="nav-link" href="#">{{ request.user }}</a>
             </div>
@@ -28,8 +36,29 @@
       </nav>
       <hr>
     </div>
+
+
     {% block content %}
-    
-    {% endblock %}
+    <div class="container">
+    <div class="container">
+      <div class="container">
+        <div class="d-grid gap-2 d-md-block">
+            <a href="{% url 'add_message' %}"><button class="btn btn-primary" type="button">Add Note</button></a>
+          </div>
+          <br><br>
+    <div class="card">
+        <h2 class="card-header text-center">Important Notes</h2>
+        <div class="card-body">
+            {% for message in messages %}
+            <h4 class="card-title">{{ message.msg }}</h4>
+            <p class="card-text">{{ message.user }}.</p>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+    </div>
+    {% endblock content %}
+
+
 </body>
 </html>

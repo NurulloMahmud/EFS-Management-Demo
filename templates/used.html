@@ -19,7 +19,13 @@
     {% for code in used %}
     <tbody>
         <tr>
+
+            {% if request.department == 2 or request.department == 1 %}
             <td> <a href="{% url 'edit_note' money_code=code.efs.code %}">{{ code.efs.code }}</a></td>
+            {% else %}
+            <td>{{ code.efs.code }}</td>
+            {% endif %}
+
             <td>{{ code.efs.amount }}</td>
             <td>{{ code.given_amount }}</td>
             <td>{{ code.reason }}</td>
@@ -31,10 +37,13 @@
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                       {{ code.efs.status }}
                     </button>
+
+                    {% if request.department == 3 or request.department == 1 %}
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="{% url 'paid' money_code=code.efs.code %}">Paid</a></li>
-                      <li><a class="dropdown-item" href="{% url 'voided' money_code=code.efs.code %}">Voided</a></li>
+                            <li><a class="dropdown-item" href="{% url 'paid' money_code=code.efs.code %}">Paid</a></li>
+                            <li><a class="dropdown-item" href="{% url 'voided' money_code=code.efs.code %}">Voided</a></li>
                     </ul>
+                    {% endif %}
                   </div>
             </td>
         </tr>

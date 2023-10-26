@@ -8,12 +8,24 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from .models import Message, Used, Efs, StatusChange
+from .models import Message, Used, Efs, StatusChange, UserDepartment
 
 
 User = get_user_model()
 
+class BaseView(View):
+    def get(self, request):
+        user = request.user
+        user_department = UserDepartment.objects.get(user=user)
+        department = user_department.department.name
+        messages = Message.objects.all()
+        print(request.department)
+        context = {
+            'department': department,
+            'messages': messages,
+        }
 
+        return render(request, 'base.html', context)
 
 class LoginView(View):
     def get(self, request):
@@ -36,12 +48,6 @@ class LogoutView(View):
         logout(request)
         return redirect('login')
     
-
-@method_decorator(login_required, name='dispatch')
-class HomeView(ListView):
-    model = Message
-    template_name = 'index.html'
-    context_object_name = 'messages' # display messages from management
 
 
 @method_decorator(login_required, name='dispatch')

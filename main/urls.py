@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import (
-    HomeView,
     UsedView,
     AvailableCodesView,
     LoginView,
@@ -14,14 +13,15 @@ from .views import (
     VoidedStatusView,
     StaffView,
     AddMessageView,
-    EditNoteView
+    EditNoteView,
+    BaseView
 )
 
 
 
 urlpatterns = [
     path('', LoginView.as_view(), name='login'),
-    path('home', HomeView.as_view(), name='home'),
+    path('home', BaseView.as_view(), name='home'),
     path('used/', UsedView.as_view(), name='used'),
     path('available/', AvailableCodesView.as_view(), name='available'),
     path('form/<int:amount>', Form.as_view(), name='form'),
