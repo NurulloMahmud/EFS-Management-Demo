@@ -20,7 +20,7 @@
     <tbody>
         <tr>
 
-            {% if request.department == 2 or request.department == 1 %}
+            {% if request.department < 3 %}
             <td> <a href="{% url 'edit_note' money_code=code.efs.code %}">{{ code.efs.code }}</a></td>
             {% else %}
             <td>{{ code.efs.code }}</td>
@@ -33,18 +33,19 @@
             <td>{{ code.given_by }}</td>
             <td>{{ code.fee }}</td>
             <td>
+                {% if request.department == 3 or request.department == 1 %}
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                       {{ code.efs.status }}
                     </button>
-
-                    {% if request.department == 3 or request.department == 1 %}
                     <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'paid' money_code=code.efs.code %}">Paid</a></li>
                             <li><a class="dropdown-item" href="{% url 'voided' money_code=code.efs.code %}">Voided</a></li>
                     </ul>
-                    {% endif %}
-                  </div>
+                </div>
+                {% else %}
+                {{ code.efs.status }}
+                {% endif %}
             </td>
         </tr>
     </tbody>

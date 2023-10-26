@@ -45,7 +45,7 @@ class Efs(models.Model):
 
 class Used(models.Model):
     efs = models.ForeignKey(Efs, on_delete=models.CASCADE)
-    given_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    given_amount = models.CharField(max_length=50)  # changed to charfield to avoid type issue
     given_by = models.ForeignKey(User, on_delete=models.CASCADE)
     reason = models.TextField()
     expense = models.TextField()

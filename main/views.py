@@ -1,4 +1,5 @@
 from typing import Any
+from django.http import Http404
 from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
 from django.views import View
@@ -53,32 +54,35 @@ class LogoutView(View):
 @method_decorator(login_required, name='dispatch')
 class AvailableCodesView(View):
     def get(self, request):
-        # get the number of available efs codes for each amount
-        fifty = Efs.objects.filter(amount=50, status='available').values('amount').count()
-        one_hundered = Efs.objects.filter(amount=100, status='available').values('amount').count()
-        two_hundered = Efs.objects.filter(amount=200, status='available').values('amount').count()
-        three_hundered = Efs.objects.filter(amount=300, status='available').values('amount').count()
-        four_hundered = Efs.objects.filter(amount=400, status='available').values('amount').count()
-        fife_hundered = Efs.objects.filter(amount=500, status='available').values('amount').count()
-        six_hundered = Efs.objects.filter(amount=600, status='available').values('amount').count()
-        seven_hundered = Efs.objects.filter(amount=700, status='available').values('amount').count()
-        eight_hundered = Efs.objects.filter(amount=800, status='available').values('amount').count()
+        if request.department in [1, 2]:
 
-        counts = {50: fifty, 
-                  100: one_hundered, 
-                  200: two_hundered, 
-                  300: three_hundered, 
-                  400: four_hundered, 
-                  500: fife_hundered, 
-                  600: six_hundered, 
-                  700: seven_hundered, 
-                  800: eight_hundered}
+            # get the number of available efs codes for each amount
+            fifty = Efs.objects.filter(amount=50, status='available').values('amount').count()
+            one_hundered = Efs.objects.filter(amount=100, status='available').values('amount').count()
+            two_hundered = Efs.objects.filter(amount=200, status='available').values('amount').count()
+            three_hundered = Efs.objects.filter(amount=300, status='available').values('amount').count()
+            four_hundered = Efs.objects.filter(amount=400, status='available').values('amount').count()
+            fife_hundered = Efs.objects.filter(amount=500, status='available').values('amount').count()
+            six_hundered = Efs.objects.filter(amount=600, status='available').values('amount').count()
+            seven_hundered = Efs.objects.filter(amount=700, status='available').values('amount').count()
+            eight_hundered = Efs.objects.filter(amount=800, status='available').values('amount').count()
 
-        context = {
-            "counts": counts
-        }
+            counts = {50: fifty, 
+                    100: one_hundered, 
+                    200: two_hundered, 
+                    300: three_hundered, 
+                    400: four_hundered, 
+                    500: fife_hundered, 
+                    600: six_hundered, 
+                    700: seven_hundered, 
+                    800: eight_hundered}
 
-        return render(request, 'available.html', context)
+            context = {
+                "counts": counts
+            }
+
+            return render(request, 'available.html', context)
+        return render(request, '404.html')
 
 
 # display efs codes that are already used/given/paid/voided
@@ -99,78 +103,92 @@ class ActivityLogView(ListView):
     template_name = 'activity.html'
     context_object_name = 'activities'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.department == 1:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect('not-found')
+
 
 # change the money code status to paid
 @method_decorator(login_required, name='dispatch')
 class PaidStatusView(View):
     def get(self, request, money_code):
-        efs_code = Efs.objects.get(code=money_code)
-        old_status = efs_code.status
-        
-        StatusChange.objects.create(
-            efs=efs_code, 
-            user=request.user,
-            old_status=old_status,
-            new_status='paid'
-        )
+        if request.department in [1, 3]:
+            efs_code = Efs.objects.get(code=money_code)
+            old_status = efs_code.status
+            
+            StatusChange.objects.create(
+                efs=efs_code, 
+                user=request.user,
+                old_status=old_status,
+                new_status='paid'
+            )
 
-        efs_code.status = 'paid'
-        efs_code.save()
+            efs_code.status = 'paid'
+            efs_code.save()
 
 
-        return redirect('used')
+            return redirect('used')
+        else:
+            return redirect('not-found')
 
 
 # change the money code status to voided
 @method_decorator(login_required, name='dispatch')
 class VoidedStatusView(View):
     def get(self, request, money_code):
-        efs_code = Efs.objects.get(code=money_code)
-        old_status = efs_code.status
+        if request.department in [1, 3]:
+            efs_code = Efs.objects.get(code=money_code)
+            old_status = efs_code.status
 
-        StatusChange.objects.create(
-            efs=efs_code, 
-            user=request.user,
-            old_status=old_status,
-            new_status='voided'
-        )
+            StatusChange.objects.create(
+                efs=efs_code, 
+                user=request.user,
+                old_status=old_status,
+                new_status='voided'
+            )
 
-        efs_code.status = 'voided'
-        efs_code.save()
-        return redirect('used')
-    
+            efs_code.status = 'voided'
+            efs_code.save()
+            return redirect('used')
+        else:
+            return redirect('not-found')
 
 # display the form to fill after efs money code is given
 @method_decorator(login_required, name='dispatch')
 class Form(View):
     def get(self, request, amount):
-        user = request.user
-        efs = Efs.objects.filter(amount=amount, status='available').first()
-        efs_code = efs.code
-        reference = Efs.objects.get(code=efs_code).reference  # Use dot notation here
-        efs.status='given'
-        efs.save()
-        
-        # record the money code in used for accounting team to review
-        new_used = Used.objects.create(efs=efs, given_by=user, date=timezone.now())
-        new_used.save()
+        if request.department in [1, 2]:
+            user = request.user
+            efs = Efs.objects.filter(amount=amount, status='available').first()
+            efs_code = efs.code
+            reference = Efs.objects.get(code=efs_code).reference  # Use dot notation here
+            efs.status='given'
+            efs.save()
+            
+            # record the money code in used for accounting team to review
+            new_used = Used.objects.create(efs=efs, given_by=user, date=timezone.now())
+            new_used.save()
 
-        # record the activity for management team
-        StatusChange.objects.create(
-            efs=efs, 
-            user=user, 
-            old_status='available',
-            new_status='given',
-            date=timezone.now()
-        )
+            # record the activity for management team
+            StatusChange.objects.create(
+                efs=efs, 
+                user=user, 
+                old_status='available',
+                new_status='given',
+                date=timezone.now()
+            )
 
-        context = {
-            'code': efs_code,
-            'reference': reference,
-            'amount': amount
-        }
+            context = {
+                'code': efs_code,
+                'reference': reference,
+                'amount': amount
+            }
 
-        return render(request, 'forms.html', context)
+            return render(request, 'forms.html', context)
+        else:
+            return redirect('not-found')
     
     def post(self, request, amount):
         # get the efs code given
@@ -216,26 +234,37 @@ class StaffView(ListView):
 
     def get_queryset(self):
         return super().get_queryset().order_by('-is_active', '-date_joined')
+    def dispatch(self, request, *args, **kwargs):
+        if request.department == 1:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect('not-found')
 
 
 @method_decorator(login_required, name='dispatch')
 class ActivateStaffView(View):
     def get(self, request, pk):
-        staff = User.objects.get(id=pk)
-        if staff:
-            staff.active=True
-            staff.save()
-        return redirect('staff')
+        if request.department == 1:
+            staff = User.objects.get(id=pk)
+            if staff:
+                staff.active=True
+                staff.save()
+            return redirect('staff')
+        else:
+            return render(request, '404.html')
 
 
 @method_decorator(login_required, name='dispatch')
 class DeactivateStaffView(View):
     def get(self, request, pk):
-        staff = User.objects.get(id=pk)
-        if staff:
-            staff.active=False
-            staff.save()
-        return redirect('staff')
+        if request.department == 1:
+            staff = User.objects.get(id=pk)
+            if staff:
+                staff.active=False
+                staff.save()
+            return redirect('staff')
+        else:
+            return render(request, '404.html')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -251,7 +280,9 @@ class AddMessageView(View):
 @method_decorator(login_required, name='dispatch')
 class EditNoteView(View):
     def get(self, request, money_code):
-        return render(request, 'edit_note.html')
+        if request.department in [1, 2]:
+            return render(request, 'edit_note.html')
+        return render(request, '404.html')
     
     def post(self, request, money_code):
         # get the efs code given
@@ -263,10 +294,15 @@ class EditNoteView(View):
 
         # save the maintenance team's notes
         used_object = Used.objects.filter(efs=efs_instance).first()
-        used_object.given_amount = given_amount
-        used_object.reason = reason
-        used_object.expense = expense
+        used_object.given_amount = given_amount if given_amount else used_object.given_amount
+        used_object.reason = reason if reason else used_object.reason
+        used_object.expense = expense if expense else used_object.expense
         used_object.fee = fee
         used_object.save()
 
         return redirect('used')
+    
+
+class PageNotFoundView(View):
+    def get(self, request):
+        return render(request, '404.html')
