@@ -15,7 +15,8 @@ from .views import (
     AddMessageView,
     EditNoteView,
     BaseView,
-    PageNotFoundView
+    PageNotFoundView,
+    AddStaff
 )
 
 
@@ -36,4 +37,5 @@ urlpatterns = [
     path('add_message', AddMessageView.as_view(), name='add_message'),
     path('edit/<str:money_code>', EditNoteView.as_view(), name='edit_note'),
     path('not-found', PageNotFoundView.as_view(), name='not-found'),
+    path('add-staff', AddStaff.as_view(), name='add-staff'),
 ]

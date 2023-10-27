@@ -10,13 +10,20 @@
     <label for="username">Username</label>
     <input type="text" id="username" name="username" placeholder="Unique username" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
     <label for="reason">Password</label>
-    <input type="password" id="password" name="password" placeholder="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-    <label for="department">Department</label>
-    <input type="department" id="department" name="department" placeholder="accounting/maintenance/management" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <input type="password1" id="password" name="password1" placeholder="must contain at least 8 characters with number and letter" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <label for="reason">Confirm</label>
+    <input type="password2" id="password" name="password2" placeholder="repeat the code above" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
     <label for="first_name">First Name</label>
     <input type="first_name" id="first_name" name="first_name" placeholder="first name" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
     <label for="last_name">Last Name</label>
     <input type="last_name" id="last_name" name="last_name" placeholder="last name" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    
+    <select class="form-select" name="department" aria-label="Default select example">
+        <option selected>Department</option>
+        <option value="1">Management</option>
+        <option value="2">Maintenance</option>
+        <option value="3">Accounting</option>
+    </select>
 
     <br>
     <br><button class="btn btn-primary" type="submit">Submit</button>

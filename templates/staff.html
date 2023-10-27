@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
     <div class="d-grid gap-2 d-md-block">
-        <a href="#"><button class="btn btn-primary" type="button">Add staff</button></a>
+        <a href="{% url 'add-staff' %}"><button class="btn btn-primary" type="button">Add staff</button></a>
       </div>
       <br><br>
 <table class="table table-striped table-hover">
@@ -17,21 +17,21 @@
         </tr>
     </thead>
     <tbody>
-        {% for s in staff %}
+        {% for user_department_instance in staff %}
         <tr>
-            <td>{{ s.username }}</td>
-            <td>{{ s.first_name }}</td>
-            <td>{{ s.last_name }}</td>
-            <td>{{ s.department }}</td>
-            <td>{{ s.joined }}</td>
+            <td>{{ user_department_instance.user.username }}</td>
+            <td>{{ user_department_instance.user.first_name }}</td>
+            <td>{{ user_department_instance.user.last_name }}</td>
+            <td>{{ user_department_instance.department.name }}</td>
+            <td>{{ user_department_instance.user.date_joined }}</td>
             <td>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                      {{ s.active }}
+                        {{ user_department_instance.user.is_active }}
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="{% url 'activate' pk=s.id %}">True</a></li>
-                      <li><a class="dropdown-item" href="{% url 'deactivate' pk=s.id %}">False</a></li>
+                      <li><a class="dropdown-item" href="{% url 'activate' pk=user_department_instance.user.pk %}">True</a></li>
+                      <li><a class="dropdown-item" href="{% url 'deactivate' pk=user_department_instance.user.pk %}">False</a></li>
                     </ul>
                   </div>
             </td>        

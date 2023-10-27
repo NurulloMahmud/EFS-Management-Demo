@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from .models import Message, Used, Efs, StatusChange, UserDepartment
+from .models import Department, Message, Used, Efs, StatusChange, UserDepartment
 
 
 User = get_user_model()
@@ -35,11 +35,13 @@ class LoginView(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None and user.is_active:
-            login(request, user)
-            return redirect('home')
+        current_user = User.objects.get(username=username)
+        if current_user.is_active:
+            user = authenticate(request, username=username, password=password)
+            
+            if user is not None:
+                login(request, user)
+                return redirect('home')
         return render(request, 'login.html')
 
 
@@ -228,12 +230,10 @@ class AddEfs(View):
 
 @method_decorator(login_required, name='dispatch')
 class StaffView(ListView):
-    model = User
+    model = UserDepartment
     template_name = 'staff.html'
     context_object_name = 'staff'
 
-    def get_queryset(self):
-        return super().get_queryset().order_by('-is_active', '-date_joined')
     def dispatch(self, request, *args, **kwargs):
         if request.department == 1:
             return super().dispatch(request, *args, **kwargs)
@@ -242,12 +242,39 @@ class StaffView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+class AddStaff(View):
+    def get(self, request):
+        if request.department == 1:
+            return render(request, 'add_staff.html')
+        return render(request, '404.html')
+    def post(self, request):
+        if request.department == 1:
+            username = request.POST.get('username')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+            department_id = request.POST.get('department')
+
+            if password1==password2 and not User.objects.filter(username=username).exists():
+                department = Department.objects.get(pk=department_id)
+                print(department.name)
+                user = User.objects.create_user(username=username, password=password1, first_name=first_name, last_name=last_name)
+                print(user.username)
+                user_department = UserDepartment.objects.create(user=user, department=department)
+                user_department.save()
+                print(user_department.user.get_username() + ' -> ' + user_department.department.name)
+                return redirect('staff')
+            return render(request, 'already_exists.html')
+
+
+@method_decorator(login_required, name='dispatch')
 class ActivateStaffView(View):
     def get(self, request, pk):
         if request.department == 1:
-            staff = User.objects.get(id=pk)
+            staff = User.objects.get(pk=pk)
             if staff:
-                staff.active=True
+                staff.is_active=True
                 staff.save()
             return redirect('staff')
         else:
@@ -258,9 +285,10 @@ class ActivateStaffView(View):
 class DeactivateStaffView(View):
     def get(self, request, pk):
         if request.department == 1:
-            staff = User.objects.get(id=pk)
+            staff = User.objects.get(pk=pk)
+
             if staff:
-                staff.active=False
+                staff.is_active=False
                 staff.save()
             return redirect('staff')
         else:
