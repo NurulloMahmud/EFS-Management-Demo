@@ -40,8 +40,14 @@
                 {% endif %}
     
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'used' %}">Used</a>
+                    <a class="nav-link" href="{% url 'used' %}">Given Codes</a>
                   </li>
+
+                {% if request.department == 1 or request.department == 3 %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'archive' %}">Archive</a>
+                </li>
+                {% endif %}
     
                 {% if request.department == 1 %}
                 <li class="nav-item">

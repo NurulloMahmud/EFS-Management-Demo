@@ -95,7 +95,7 @@ class UsedView(ListView):
     context_object_name = 'used'
 
     def get_queryset(self) -> QuerySet[Any]:
-        return super().get_queryset().order_by('-date')
+        return super().get_queryset().filter(efs__status='given').order_by('-date')
 
 
 # display all activities done on each money code
@@ -239,6 +239,11 @@ class StaffView(ListView):
             return super().dispatch(request, *args, **kwargs)
         else:
             return redirect('not-found')
+    
+    def get_queryset(self):
+        # Get the queryset and order it by 'is_active' field in descending order
+        queryset = super().get_queryset()
+        return queryset.order_by('-user__is_active')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -334,3 +339,17 @@ class EditNoteView(View):
 class PageNotFoundView(View):
     def get(self, request):
         return render(request, '404.html')
+
+
+# working with resolved efs data
+@method_decorator(login_required, name='dispatch')
+class ArchiveView(View):
+    def get(self, request):
+        if request.department in [1, 3]:
+            money_codes = Used.objects.all().exclude(efs__status='given')
+            context = {
+                'money_codes': money_codes
+            }
+            return render(request, 'archive.html', context)
+        return render(request, '404.html')
+    

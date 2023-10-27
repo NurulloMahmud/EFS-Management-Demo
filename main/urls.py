@@ -16,7 +16,8 @@ from .views import (
     EditNoteView,
     BaseView,
     PageNotFoundView,
-    AddStaff
+    AddStaff,
+    ArchiveView
 )
 
 
@@ -38,4 +39,5 @@ urlpatterns = [
     path('edit/<str:money_code>', EditNoteView.as_view(), name='edit_note'),
     path('not-found', PageNotFoundView.as_view(), name='not-found'),
     path('add-staff', AddStaff.as_view(), name='add-staff'),
+    path('archive', ArchiveView.as_view(), name='archive'),
 ]
