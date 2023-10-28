@@ -1,4 +1,6 @@
+import code
 from typing import Any
+from urllib import request
 from django.http import HttpResponseRedirect
 from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
@@ -10,6 +12,8 @@ from django.views.generic import ListView
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from .models import Department, Message, Used, Efs, StatusChange, UserDepartment
+from django.views.generic import UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 
 User = get_user_model()
@@ -209,7 +213,7 @@ class Form(View):
         used_object.fee = fee
         used_object.save()
 
-        return redirect('home')
+        return redirect('available')
     
 
 @method_decorator(login_required, name='dispatch')
@@ -306,15 +310,24 @@ class AddMessageView(View):
         return render(request, 'add_message.html')
     def post(self, request):
         msg = request.POST.get('message')
-        Message.objects.create(msg=msg, user=request.user)
+        Message.objects.create(message=msg, user=request.user)
         return redirect('home')
 
 
 @method_decorator(login_required, name='dispatch')
-class EditNoteView(View):
+class EditNoteView(View):    
     def get(self, request, money_code):
         if request.department in [1, 2]:
-            return render(request, 'edit_note.html')
+            efs_instance = Efs.objects.get(code=money_code)
+            used_instance = Used.objects.get(efs=efs_instance)
+            context = {
+                'given_amount': used_instance.given_amount,
+                'reason': used_instance.reason,
+                'expense': used_instance.expense,
+                'fee': used_instance.fee,
+                'amount': efs_instance.amount
+            }
+            return render(request, 'edit_note.html', context)
         return render(request, '404.html')
     
     def post(self, request, money_code):
@@ -346,10 +359,26 @@ class PageNotFoundView(View):
 class ArchiveView(View):
     def get(self, request):
         if request.department in [1, 3]:
-            money_codes = Used.objects.all().exclude(efs__status='given')
+            money_codes = Used.objects.all().exclude(efs__status='given').order_by('-date')
             context = {
                 'money_codes': money_codes
             }
             return render(request, 'archive.html', context)
         return render(request, '404.html')
     
+
+@method_decorator(login_required, name='dispatch')
+class UpdateNoteView(UpdateView):
+    model = Message
+    template_name = 'update_note.html'
+    fields = ('message',)
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+
+@method_decorator(login_required, name='dispatch')
+class DeleteNoteView(DeleteView):
+    model = Message
+    template_name = 'delete_note.html'
+    success_url = reverse_lazy('home')

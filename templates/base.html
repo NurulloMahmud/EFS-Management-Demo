@@ -102,7 +102,14 @@
   <li class="nav-item">
       <a class="nav-link" href="{% url 'logout' %}">Logout</a>
     </li>
-</ul>
+    
+  <span class="navbar-text ms-auto me-3">
+      {{ request.user }}
+  </span>
+  
+
+  </ul>
+  
 
 
 
@@ -122,7 +129,21 @@
         <h2 class="card-header text-center">Important Notes</h2>
         <div class="card-body">
             {% for message in messages %}
-            <h4 class="card-title">{{ message.msg }}</h4>
+            <h4 class="card-title">{{ message.message }}</h4>
+            {% if message.user == request.user %}
+            <a href="{% url 'update-note' pk=message.pk %}">
+              <button type="button" class="btn btn-primary"
+              style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                Update
+              </button>
+            </a>
+            <a href="{% url 'delete-note' pk=message.pk %}">
+              <button type="button" class="btn btn-danger"
+              style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                Delete
+              </button>
+            </a>
+            {% endif %}
             <p class="card-text">{{ message.user }}.</p>
             {% endfor %}
         </div>

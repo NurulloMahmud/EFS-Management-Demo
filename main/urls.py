@@ -17,7 +17,9 @@ from .views import (
     BaseView,
     PageNotFoundView,
     AddStaff,
-    ArchiveView
+    ArchiveView,
+    UpdateNoteView,
+    DeleteNoteView
 )
 
 
@@ -40,4 +42,6 @@ urlpatterns = [
     path('not-found', PageNotFoundView.as_view(), name='not-found'),
     path('add-staff', AddStaff.as_view(), name='add-staff'),
     path('archive/', ArchiveView.as_view(), name='archive'),
+    path('update-note/<int:pk>', UpdateNoteView.as_view(), name='update-note'),
+    path('delete-note/<int:pk>', DeleteNoteView.as_view(), name='delete-note'),
 ]

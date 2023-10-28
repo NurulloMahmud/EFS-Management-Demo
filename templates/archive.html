@@ -17,7 +17,7 @@
         {% for code in money_codes %}
         <tr>
             <td>{{ code.efs.code }}</td>
-            <td>{{ code.given_amount }}</td>
+            <td>${{ code.given_amount }}</td>
             <td>{{ code.reason }}</td>
             <td>{{ code.expense }}</td>
             <td>{{ code.fee }}</td>

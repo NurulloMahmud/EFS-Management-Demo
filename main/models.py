@@ -26,7 +26,7 @@ class UserDepartment(models.Model):
 
 
 class Message(models.Model):
-    msg = models.CharField(max_length=50)
+    message = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
