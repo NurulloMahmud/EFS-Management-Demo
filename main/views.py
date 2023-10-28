@@ -24,12 +24,12 @@ class BaseView(View):
         user_department = UserDepartment.objects.get(user=user)
         department = user_department.department.name
         messages = Message.objects.all()
-        print(request.department)
+
         context = {
             'department': department,
             'messages': messages,
         }
-
+        print(request.path)
         return render(request, 'base.html', context)
 
 class LoginView(View):
