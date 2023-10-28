@@ -13,8 +13,8 @@
 </head>
 <body>
     <div class="container">
-    <div class="container">
-      <div class="container">
+    <!-- <div class="container"> -->
+      <!-- <div class="container">
 
       <nav class="navbar bg-body-tertiary fixed-top">
         <div class="container">
@@ -65,12 +65,51 @@
             </div>
           </div>
         </div>
-      </nav> <br><br>
-    </div>
+      </nav> <br><br> <br> -->
+
+<br>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'home' %}">Home</a>
+  </li>
+
+  {% if request.department < 3 %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'available' %}">Available</a>
+  </li>
+  {% endif %}
+
+  <li class="nav-item">
+      <a class="nav-link" href="{% url 'used' %}">Given Codes</a>
+    </li>
+
+  {% if request.department == 1 or request.department == 3 %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'archive' %}">Archive</a>
+  </li>
+  {% endif %}
+
+  {% if request.department == 1 %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'activity' %}">Activity</a>
+  </li>
+  <li>
+    <a class="nav-link" href="{% url 'staff' %}">Staff</a>
+  </li>
+  {% endif %}
+
+  <li class="nav-item">
+      <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+    </li>
+</ul>
+
+
+
+    <!-- </div> -->
   </div>
 </div>
-<hr>
-
+<br>
 
 
     {% block content %}
