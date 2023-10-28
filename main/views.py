@@ -1,5 +1,5 @@
 from typing import Any
-from django.http import Http404
+from django.http import HttpResponseRedirect
 from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
 from django.views import View
@@ -131,7 +131,7 @@ class PaidStatusView(View):
             efs_code.save()
 
 
-            return redirect('used')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
             return redirect('not-found')
 
@@ -153,7 +153,7 @@ class VoidedStatusView(View):
 
             efs_code.status = 'voided'
             efs_code.save()
-            return redirect('used')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
             return redirect('not-found')
 
