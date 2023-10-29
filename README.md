@@ -15,7 +15,7 @@ Installation
 - git init
 - git clone https://github.com/NurulloMahmud/EFS.git  
   (Mac/Linux)
-- source env/bin/activate
+- source env/bin/activate  
   (Windows)  
 - env\Scripts\activate
 - python3 manage.py runserver
