@@ -13,7 +13,7 @@ password: admin
 
 Installation
 - git init
-- git clone https://github.com/NurulloMahmud/EFS.git
+- git clone https://github.com/NurulloMahmud/EFS.git  
   (Mac/Linux)
 - source env/bin/activate
   (Windows)
