@@ -166,21 +166,33 @@ class VoidedStatusView(View):
 class Form(View):
     def get(self, request, amount):
         if request.department in [1, 2]:
-            user = request.user
+            return render(request, 'forms.html')
+        return render(request, '404.html')
+    def post(self, request, amount):
+        # get the form data
+        given_amount = request.POST.get('amount')
+        reason = request.POST.get('reason')
+        expense = request.POST.get('expense')
+        fee = request.POST.get('fee') == 'on'
+        given_amount = amount if not given_amount else given_amount
+
+        if reason is not None and expense is not None:
+
+            # get the efs code
             efs = Efs.objects.filter(amount=amount, status='available').first()
             efs_code = efs.code
-            reference = Efs.objects.get(code=efs_code).reference  # Use dot notation here
+            reference = efs.reference
             efs.status='given'
             efs.save()
-            
-            # record the money code in used for accounting team to review
-            new_used = Used.objects.create(efs=efs, given_by=user, date=timezone.now())
+
+            # record the data in used model
+            new_used = Used.objects.create(efs=efs, given_by=request.user, given_amount=given_amount, reason=reason, expense=expense, fee=fee)
             new_used.save()
 
             # record the activity for management team
             StatusChange.objects.create(
                 efs=efs, 
-                user=user, 
+                user=request.user, 
                 old_status='available',
                 new_status='given',
                 date=timezone.now()
@@ -189,31 +201,14 @@ class Form(View):
             context = {
                 'code': efs_code,
                 'reference': reference,
-                'amount': amount
+                'amount': given_amount
             }
 
-            return render(request, 'forms.html', context)
+            return render(request, 'efscode.html', context)
+        
         else:
-            return redirect('not-found')
-    
-    def post(self, request, amount):
-        # get the efs code given
-        efs_code = request.POST.get('code')
-        given_amount = request.POST.get('amount')
-        reason = request.POST.get('reason')
-        expense = request.POST.get('expense')
-        fee = request.POST.get('fee') == 'on'
-        efs_instance = Efs.objects.get(code=efs_code)
+            return redirect('form')
 
-        # save the maintenance team's notes
-        used_object = Used.objects.filter(efs=efs_instance).first()
-        used_object.given_amount = given_amount
-        used_object.reason = reason
-        used_object.expense = expense
-        used_object.fee = fee
-        used_object.save()
-
-        return redirect('available')
     
 
 @method_decorator(login_required, name='dispatch')
@@ -356,14 +351,26 @@ class PageNotFoundView(View):
 
 # working with resolved efs data
 @method_decorator(login_required, name='dispatch')
-class ArchiveView(View):
+class VoidedView(View):
     def get(self, request):
         if request.department in [1, 3]:
-            money_codes = Used.objects.all().exclude(efs__status='given').order_by('-date')
+            money_codes = Used.objects.filter(efs__status='voided').order_by('-date')
             context = {
                 'money_codes': money_codes
             }
-            return render(request, 'archive.html', context)
+            return render(request, 'voided.html', context)
+        return render(request, '404.html')
+    
+
+@method_decorator(login_required, name='dispatch')
+class PaidView(View):
+    def get(self, request):
+        if request.department in [1, 3]:
+            money_codes = Used.objects.filter(efs__status='paid').order_by('-date')
+            context = {
+                'money_codes': money_codes
+            }
+            return render(request, 'voided.html', context)
         return render(request, '404.html')
     
 
@@ -382,3 +389,5 @@ class DeleteNoteView(DeleteView):
     model = Message
     template_name = 'delete_note.html'
     success_url = reverse_lazy('home')
+
+

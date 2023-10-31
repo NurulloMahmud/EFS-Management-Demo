@@ -13,138 +13,93 @@
 </head>
 <body>
     <div class="container">
-    <!-- <div class="container"> -->
-      <!-- <div class="container">
-
-      <nav class="navbar bg-body-tertiary fixed-top">
-        <div class="container">
-          <a class="navbar-brand" href="#">Welcome {{ request.user }} </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
-                </li>
-    
-                {% if request.department < 3 %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'available' %}">Available</a>
-                </li>
-                {% endif %}
-    
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'used' %}">Given Codes</a>
-                  </li>
-
-                {% if request.department == 1 or request.department == 3 %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'archive' %}">Archive</a>
-                </li>
-                {% endif %}
-    
-                {% if request.department == 1 %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'activity' %}">Activity</a>
-                  <a class="nav-link" href="{% url 'staff' %}">Staff</a>
-                </li>
-                {% endif %}
-    
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                  </li>
-                
-              </ul>
-              
-            </div>
-          </div>
-        </div>
-      </nav> <br><br> <br> -->
 
 <br>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
 
   {% if request.path == '/home/' %}
-  <li class="nav-item">
-    <a class="nav-link active" href="{% url 'home' %}">Home</a>
-  </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'home' %}">Home</a>
+      </li>
   {% else %}
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'home' %}">Home</a>
-  </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'home' %}">Home</a>
+      </li>
   {% endif %}
   
   {% if request.department < 3 %}
-  {% if request.path == '/available/' %}
-  <li class="nav-item">
-    <a class="nav-link active" href="{% url 'available' %}">Available</a>
-  </li>
-  {% else %}
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'available' %}">Available</a>
-  </li>
-  {% endif %}
+      {% if request.path == '/available/' %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'available' %}">Available</a>
+          </li>
+      {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'available' %}">Available</a>
+          </li>
+      {% endif %}
   {% endif %}
 
 
   {% if request.path == '/used/' %}
-  <li class="nav-item">
-    <a class="nav-link active" href="{% url 'used' %}">Given Codes</a>
-  </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'used' %}">Given Codes</a>
+      </li>
   {% else %}
-  <li class="nav-item">
-      <a class="nav-link" href="{% url 'used' %}">Given Codes</a>
-    </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'used' %}">Given Codes</a>
+        </li>
   {% endif %}
   
 
   {% if request.department == 1 or request.department == 3 %}
-  {% if request.path == '/archive/' %}
-  <li class="nav-item">
-    <a class="nav-link active" href="{% url 'archive' %}">Archive</a>
-  </li>
-  {% else %}
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'archive' %}">Archive</a>
-  </li>
+      {% if request.path == '/voided/' %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'voided' %}">Voided</a>
+          </li>
+      {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'voided' %}">Voided</a>
+          </li>
+      {% endif %}
   {% endif %}
+
+  {% if request.department == 1 or request.department == 3 %}
+      {% if request.path == '/paid/' %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'paid' %}">Paid</a>
+          </li>
+      {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'paid' %}">Paid</a>
+          </li>
+      {% endif %}
   {% endif %}
 
 
   {% if request.department == 1 %}
-  {% if request.path == '/activity/' %}
-  <li class="nav-item">
-    <a class="nav-link active" href="{% url 'activity' %}">Activity</a>
-  </li>  
-  {% else %}
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'activity' %}">Activity</a>
-  </li>
+      {% if request.path == '/activity/' %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'activity' %}">Activity</a>
+          </li>  
+      {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'activity' %}">Activity</a>
+          </li>
+      {% endif %}
+
+      {% if request.path == '/staff/' %}
+          <li>
+            <a class="nav-link active" href="{% url 'staff' %}">Staff</a>
+          </li>  
+      {% else %}
+          <li>
+            <a class="nav-link" href="{% url 'staff' %}">Staff</a>
+          </li>
+      {% endif %}
   {% endif %}
 
-  {% if request.path == '/staff/' %}
-  <li>
-    <a class="nav-link active" href="{% url 'staff' %}">Staff</a>
-  </li>  
-  {% else %}
-  <li>
-    <a class="nav-link" href="{% url 'staff' %}">Staff</a>
-  </li>
-  {% endif %}
-  {% endif %}
-
-  <li class="nav-item">
-      <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-    </li>
-    
   <span class="navbar-text ms-auto me-3">
-      {{ request.user }}
+      <a class="nav-link" href="{% url 'logout' %}">Logout: {{ request.user }}</a> 
   </span>
   
 

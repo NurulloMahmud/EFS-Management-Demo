@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h5>
+        <br>
+        Money Tranfer Code: <b>{{ code }}</b> <br>
+        Reference: <b>{{ reference }}</b> <br>
+        Amount: <b> ${{ amount }}</b>
+    </h5>
+    <br><br>
+    <a href="{% url 'home' %}">
+    <button type="button" class="btn btn-primary btn-lg">Home</button>
+    </a>
+</div>
+{% endblock content %}

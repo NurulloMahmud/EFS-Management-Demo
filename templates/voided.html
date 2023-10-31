@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .btn-xs {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.55rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+.copy-button {
+        margin-right: 10px;
+    }
+</style>
+<div class="container">
+    <input type="text" id="searchInput" placeholder="Search...">
+    <br><br>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th><b>Money Code</b></th>
+                <th><b>Used Amount</b></th>
+                <th><b>Maintenance Note</b></th>
+                <th><b>Expense</b></th>
+                <th><b>Fee</b></th>
+                <th><b>Date</b></th>
+                <th><b>Status</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for code in money_codes %}
+            <tr>
+                <td>
+                    {{ code.efs.code }}
+                    <button class="btn btn-success btn-xs me-2 copy-button" onclick="copyToClipboard('{{ code.efs.code }}')">Copy</button>
+                </td>
+                <td>${{ code.given_amount }}</td>
+                <td>{{ code.reason }}</td>
+                <td>{{ code.expense }}</td>
+                <td>{{ code.fee }}</td>
+                <td>{{ code.date }}</td>
+                <td>
+                    {% if request.department == 3 or request.department == 1 %}
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          {{ code.efs.status }}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'paid' money_code=code.efs.code %}">Paid</a></li>
+                            <li><a class="dropdown-item" href="{% url 'voided' money_code=code.efs.code %}">Voided</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    {{ code.efs.status }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Copied to clipboard!</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function copyToClipboard(value) {
+        const el = document.createElement('textarea');
+        el.value = value;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        
+        // Show toast message
+        $('#toast').toast('show');
+    }
+
+    $(document).ready(function() {
+        $('#searchInput').on('keyup', function() {
+            var value = $(this).val().toLowerCase();
+            $('table tbody tr').filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock content %}
