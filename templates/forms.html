@@ -12,17 +12,23 @@
     {% csrf_token %}
     
     <label for="amount">Amount</label>
-    <input type="text" id="amount" name="amount" placeholder="How much are you giving ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <input type="number" id="amount" name="amount" placeholder="How much are you giving ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" step="0.01" required max="{{ amount }}">
+    
     <label for="reason">Reason</label>
-    <input type="reason" id="reason" name="reason" placeholder="This field is required!" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <input type="text" id="reason" name="reason" placeholder="This field is required!" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+    
     <label for="expense">Expense</label>
-    <input type="expense" id="expense" name="expense" placeholder="Who'se expense is it ? (required!)" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    <input type="expense" id="expense" name="expense" placeholder="Who'se expense is it ? (required!)" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
     <br>
+    
     <div class="form-check form-switch">
       <input class="form-check-input" id="fee" name="fee" type="checkbox" role="switch" id="flexSwitchCheckChecked">
       <label class="form-check-label" for="flexSwitchCheckDefault">Add Fee</label>
     </div>
-    <br><button class="btn btn-primary" type="submit">Submit</button>
+    
+    <br>
+    <button class="btn btn-primary" type="submit">Submit</button>
+  
   </form>
 </div>
   {% endblock content %}

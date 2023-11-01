@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
 <div class="container">
     <h5>
@@ -10,8 +9,31 @@
         Amount: <b> ${{ amount }}</b>
     </h5>
     <br><br>
+    <button type="button" class="btn btn-success btn-lg" onclick="copyH5ToClipboard('{{ code }}')">Copy to Clipboard</button>
     <a href="{% url 'home' %}">
-    <button type="button" class="btn btn-primary btn-lg">Home</button>
+        <button type="button" class="btn btn-primary btn-lg">Home</button>
     </a>
 </div>
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Copied to clipboard!</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function copyH5ToClipboard(value) {
+        const el = document.createElement('textarea');
+        el.value = value;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        
+        // Show toast message
+        $('#toast').toast('show');
+    }
+</script>
 {% endblock content %}

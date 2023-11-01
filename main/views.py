@@ -1,4 +1,4 @@
-import code
+from decimal import Decimal
 from typing import Any
 from urllib import request
 from django.http import HttpResponseRedirect
@@ -166,48 +166,51 @@ class VoidedStatusView(View):
 class Form(View):
     def get(self, request, amount):
         if request.department in [1, 2]:
-            return render(request, 'forms.html')
+            return render(request, 'forms.html', {"amount": amount})
         return render(request, '404.html')
     def post(self, request, amount):
-        # get the form data
-        given_amount = request.POST.get('amount')
-        reason = request.POST.get('reason')
-        expense = request.POST.get('expense')
-        fee = request.POST.get('fee') == 'on'
-        given_amount = amount if not given_amount else given_amount
+        if request.department in [1, 2]:
+            # get the form data
+            given_amount = request.POST.get('amount')
+            reason = request.POST.get('reason')
+            expense = request.POST.get('expense')
+            fee = request.POST.get('fee') == 'on'
+            given_amount = amount if not given_amount else given_amount
 
-        if reason is not None and expense is not None:
 
-            # get the efs code
-            efs = Efs.objects.filter(amount=amount, status='available').first()
-            efs_code = efs.code
-            reference = efs.reference
-            efs.status='given'
-            efs.save()
+            if reason is not None and expense is not None:
 
-            # record the data in used model
-            new_used = Used.objects.create(efs=efs, given_by=request.user, given_amount=given_amount, reason=reason, expense=expense, fee=fee)
-            new_used.save()
+                # get the efs code
+                efs = Efs.objects.filter(amount=amount, status='available').first()
+                efs_code = efs.code
+                reference = efs.reference
+                efs.status='given'
+                efs.save()
 
-            # record the activity for management team
-            StatusChange.objects.create(
-                efs=efs, 
-                user=request.user, 
-                old_status='available',
-                new_status='given',
-                date=timezone.now()
-            )
+                # record the data in used model
+                new_used = Used.objects.create(efs=efs, given_by=request.user, given_amount=given_amount, reason=reason, expense=expense, fee=fee)
+                new_used.save()
 
-            context = {
-                'code': efs_code,
-                'reference': reference,
-                'amount': given_amount
-            }
+                # record the activity for management team
+                StatusChange.objects.create(
+                    efs=efs, 
+                    user=request.user, 
+                    old_status='available',
+                    new_status='given',
+                    date=timezone.now()
+                )
 
-            return render(request, 'efscode.html', context)
-        
-        else:
-            return redirect('form')
+                context = {
+                    'code': efs_code,
+                    'reference': reference,
+                    'amount': given_amount
+                }
+
+                return render(request, 'efscode.html', context)
+            
+            else:
+                return redirect('form')
+        return render(request, '404.html')
 
     
 
