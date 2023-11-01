@@ -183,6 +183,7 @@ class Form(View):
         if request.department in [1, 2]:
             return render(request, 'forms.html', {"amount": amount})
         return render(request, '404.html')
+    
     def post(self, request, amount):
         if request.department in [1, 2]:
             # get the form data
