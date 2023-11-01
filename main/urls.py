@@ -20,7 +20,8 @@ from .views import (
     VoidedView,
     UpdateNoteView,
     DeleteNoteView,
-    PaidView
+    PaidView,
+    VoidRequestsView
 )
 
 
@@ -46,4 +47,5 @@ urlpatterns = [
     path('paid/', PaidView.as_view(), name='paid'),
     path('update-note/<int:pk>', UpdateNoteView.as_view(), name='update-note'),
     path('delete-note/<int:pk>', DeleteNoteView.as_view(), name='delete-note'),
+    path('void-requests/', VoidRequestsView.as_view(), name='void-requests'),
 ]

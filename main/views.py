@@ -1,6 +1,4 @@
-from decimal import Decimal
 from typing import Any
-from urllib import request
 from django.http import HttpResponseRedirect
 from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
@@ -152,14 +150,31 @@ class VoidedStatusView(View):
                 efs=efs_code, 
                 user=request.user,
                 old_status=old_status,
-                new_status='voided'
+                new_status='void request'
             )
 
-            efs_code.status = 'voided'
+            efs_code.status = 'pending'
             efs_code.save()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
             return redirect('not-found')
+
+
+@method_decorator(login_required, name='dispatch')
+class VoidRequestsView(View):
+    def get(self, request):
+        if request.department == 1:
+            requests = Used.objects.filter(efs__status='pending')
+            for req in requests:
+                req.difference = req.efs.amount - req.given_amount
+            context = {
+                'requests': requests
+            }
+            return render(request, 'void_requests.html', context)
+
+    def post(self, request):
+        pass
+
 
 # display the form to fill after efs money code is given
 @method_decorator(login_required, name='dispatch')

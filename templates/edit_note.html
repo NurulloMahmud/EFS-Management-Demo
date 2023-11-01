@@ -15,11 +15,13 @@
                 <input type="hidden" name="reference" value="{{ reference }}">
             
                 <label for="amount">Amount</label>
-                <input value="{{ given_amount }}" type="text" id="amount" name="amount" placeholder="How much are you giving ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <input value="{{ given_amount }}" type="number" id="amount" name="amount" placeholder="How much are you giving ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required step="0.01">
+                
                 <label for="reason">Reason</label>
-                <input value="{{ reason }}" type="reason" id="reason" name="reason" placeholder="Write a reason" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <input value="{{ reason }}" type="reason" id="reason" name="reason" placeholder="Write a reason" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                
                 <label for="expense">Expense</label>
-                <input value="{{ expense }}" type="expense" id="expense" name="expense" placeholder="Who'se expense is it ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <input value="{{ expense }}" type="expense" id="expense" name="expense" placeholder="Who'se expense is it ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                 <br>
 
                 <div class="form-check form-switch">
