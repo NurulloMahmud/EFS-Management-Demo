@@ -8,7 +8,7 @@ class DepartmentMiddleware:
     def __call__(self, request):
         if request.user.is_authenticated:
             user = User.objects.get(id=request.user.id)
-            user_department = UserDepartment.objects.filter(user=user).values('department').first()
+            user_department = UserDepartment.objects.filter(user=user.pk).values('department').first()
             request.department = user_department['department'] if user_department else None
         else:
             request.department = None
