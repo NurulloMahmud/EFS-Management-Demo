@@ -13,6 +13,21 @@ from .models import Department, Message, Used, Efs, StatusChange, UserDepartment
 from django.views.generic import UpdateView, DeleteView
 from django.urls import reverse_lazy
 
+from django.contrib.auth.views import LoginView as AuthLoginView
+
+class LoginView(AuthLoginView):
+    template_name = 'login.html'  # Replace with your login template
+
+    def form_valid(self, form):
+        # Check if 'next' is in the request.GET
+        next_url = self.request.GET.get('next')
+        if next_url:
+            # Redirect to the 'next' URL after a successful login
+            return redirect(next_url)
+        else:
+            # Redirect to the default URL if 'next' is not provided
+            return super().form_valid(form)
+        
 
 User = get_user_model()
 
@@ -26,24 +41,24 @@ class BaseView(View):
         }
         return render(request, 'base.html', context)
 
-class LoginView(View):
-    def get(self, request):
-        return render(request, 'login.html')
+# class LoginView(View):
+#     def get(self, request):
+#         return render(request, 'login.html')
 
-    def post(self, request):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        try:
-            current_user = User.objects.get(username=username)
-            if current_user.is_active:
-                user = authenticate(request, username=username, password=password)
+#     def post(self, request):
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         try:
+#             current_user = User.objects.get(username=username)
+#             if current_user.is_active:
+#                 user = authenticate(request, username=username, password=password)
                 
-                if user is not None:
-                    login(request, user)
-                    return redirect('home')
-        except:
-            return render(request, 'login.html')
-        return render(request, 'login.html')
+#                 if user is not None:
+#                     login(request, user)
+#                     return redirect('home')
+#         except:
+#             return render(request, 'login.html')
+#         return render(request, 'login.html')
 
 
 @method_decorator(login_required, name='dispatch')
