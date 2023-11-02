@@ -19,12 +19,9 @@ User = get_user_model()
 class BaseView(View):
     def get(self, request):
         user = request.user
-        user_department = UserDepartment.objects.get(user=user)
-        department = user_department.department.name
         messages = Message.objects.all()
 
         context = {
-            'department': department,
             'messages': messages,
         }
         return render(request, 'base.html', context)
