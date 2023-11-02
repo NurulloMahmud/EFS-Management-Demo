@@ -27,7 +27,6 @@ class BaseView(View):
             'department': department,
             'messages': messages,
         }
-        print(request.path)
         return render(request, 'base.html', context)
 
 class LoginView(View):
@@ -37,13 +36,16 @@ class LoginView(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        current_user = User.objects.get(username=username)
-        if current_user.is_active:
-            user = authenticate(request, username=username, password=password)
-            
-            if user is not None:
-                login(request, user)
-                return redirect('home')
+        try:
+            current_user = User.objects.get(username=username)
+            if current_user.is_active:
+                user = authenticate(request, username=username, password=password)
+                
+                if user is not None:
+                    login(request, user)
+                    return redirect('home')
+        except:
+            return render(request, 'login.html')
         return render(request, 'login.html')
 
 
@@ -140,7 +142,7 @@ class PaidStatusView(View):
 
 # change the money code status to voided
 @method_decorator(login_required, name='dispatch')
-class VoidedStatusView(View):
+class VoidedStatusRequestView(View):
     def get(self, request, money_code):
         if request.department in [1, 3]:
             efs_code = Efs.objects.get(code=money_code)
@@ -153,7 +155,7 @@ class VoidedStatusView(View):
                 new_status='void request'
             )
 
-            efs_code.status = 'pending'
+            efs_code.status = 'pending' if request.department == 3 else 'voided'
             efs_code.save()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
@@ -281,12 +283,9 @@ class AddStaff(View):
 
             if password1==password2 and not User.objects.filter(username=username).exists():
                 department = Department.objects.get(pk=department_id)
-                print(department.name)
                 user = User.objects.create_user(username=username, password=password1, first_name=first_name, last_name=last_name)
-                print(user.username)
                 user_department = UserDepartment.objects.create(user=user, department=department)
                 user_department.save()
-                print(user_department.user.get_username() + ' -> ' + user_department.department.name)
                 return redirect('staff')
             return render(request, 'already_exists.html')
 
