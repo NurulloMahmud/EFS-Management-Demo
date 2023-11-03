@@ -1,4 +1,4 @@
-#!/home/nurulloh/Desktop/DJ-Projects/efs/EFS/env/bin/python3
+#!/home/nurulloh/Desktop/DJ-Projects/EFS/env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
