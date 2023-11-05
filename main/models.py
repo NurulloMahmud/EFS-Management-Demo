@@ -64,7 +64,7 @@ class StatusChange(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     old_status = models.CharField(max_length=50)
     new_status = models.CharField(max_length=50)
-    date = models.DateTimeField(default=timezone.now())
+    date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ('-date', 'efs__code')
