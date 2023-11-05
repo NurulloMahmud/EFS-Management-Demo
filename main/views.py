@@ -149,16 +149,17 @@ class VoidedStatusRequestView(View):
             print(efs_code.status)
             print(old_status)
 
+            efs_code.status = 'pending' if request.department == 3 else 'voided'
+            print(efs_code.status)
+            efs_code.save()
+
             StatusChange.objects.create(
                 efs=efs_code, 
                 user=request.user,
                 old_status=old_status,
-                new_status='requested'
+                new_status=efs_code.status
             )
             print("status change completed")
-            efs_code.status = 'pending' if request.department == 3 else 'voided'
-            print(efs_code.status)
-            efs_code.save()
 
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
