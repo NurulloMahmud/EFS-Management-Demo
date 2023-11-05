@@ -141,9 +141,13 @@ class PaidStatusView(View):
 @method_decorator(login_required, name='dispatch')
 class VoidedStatusRequestView(View):
     def get(self, request, money_code):
+        print("in view")
         if request.department in [1, 3]:
+            print("in if statement")
             efs_code = Efs.objects.get(code=money_code)
             old_status = efs_code.status
+            print(efs_code.status)
+            print(old_status)
 
             StatusChange.objects.create(
                 efs=efs_code, 
@@ -153,6 +157,7 @@ class VoidedStatusRequestView(View):
             )
             
             efs_code.status = 'pending' if request.department == 3 else 'voided'
+            print(efs_code.status)
             efs_code.save()
 
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
