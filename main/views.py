@@ -149,12 +149,12 @@ class VoidedStatusRequestView(View):
             print(efs_code.status)
             print(old_status)
 
-            # StatusChange.objects.create(
-            #     efs=efs_code, 
-            #     user=request.user,
-            #     old_status=old_status,
-            #     new_status='void request'
-            # )
+            StatusChange.objects.create(
+                efs=efs_code, 
+                user=request.user,
+                old_status=old_status,
+                new_status='requested'
+            )
             print("status change completed")
             efs_code.status = 'pending' if request.department == 3 else 'voided'
             print(efs_code.status)
