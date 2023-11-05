@@ -37,7 +37,7 @@ class Efs(models.Model):
     code = models.CharField(max_length=20)
     reference = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=15, default='available')
+    status = models.CharField(max_length=50, default='available')
     date = models.DateTimeField(default=timezone.now())
 
     def __str__(self) -> str:
