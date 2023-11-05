@@ -142,6 +142,7 @@ class PaidStatusView(View):
 class VoidedStatusRequestView(View):
     def get(self, request, money_code):
         print(f"Processing request for money_code: {money_code}")  # Debugging line
+        print(f"department: {request.department}")
         if request.department in [1, 3]:
             # efs_code = Efs.objects.get(code=money_code)
             old_status = efs_code.status
