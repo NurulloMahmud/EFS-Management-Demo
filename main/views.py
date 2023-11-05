@@ -152,8 +152,16 @@ class VoidedStatusRequestView(View):
                 new_status='void request'
             )
 
-            efs_code.status = 'pending' if request.department == 3 else 'voided'
-            efs_code.save()
+            if request.department == 3:
+                efs_code.status = 'pending'
+                efs_code.save()
+            else:
+                efs_code.status = 'voided'
+                efs_code.save()
+            
+            # efs_code.status = 'pending' if request.department == 3 else 'voided'
+            # efs_code.save()
+
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
             return redirect('not-found')
