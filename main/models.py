@@ -62,8 +62,8 @@ class Used(models.Model):
 class StatusChange(models.Model):
     efs = models.ForeignKey(Efs, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    old_status = models.CharField(max_length=10)
-    new_status = models.CharField(max_length=10)
+    old_status = models.CharField(max_length=50)
+    new_status = models.CharField(max_length=50)
     date = models.DateTimeField(default=timezone.now())
 
     class Meta:

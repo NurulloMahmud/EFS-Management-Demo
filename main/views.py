@@ -141,17 +141,9 @@ class PaidStatusView(View):
 @method_decorator(login_required, name='dispatch')
 class VoidedStatusRequestView(View):
     def get(self, request, money_code):
-        print(f"Processing request for money_code: {money_code}")  # Debugging line
-        print(f"department: {request.department}")
-        if request.department in [1, 3, '1', '3']:
-            # efs_code = Efs.objects.get(code=money_code)
+        if request.department in [1, 3]:
+            efs_code = Efs.objects.get(code=money_code)
             old_status = efs_code.status
-
-            try:
-                efs_code = Efs.objects.get(code=money_code)
-            except Efs.DoesNotExist:
-                print(f"No Efs object found for money_code: {money_code}")  # Debugging line
-                return redirect('not-found')
 
             StatusChange.objects.create(
                 efs=efs_code, 
@@ -159,16 +151,9 @@ class VoidedStatusRequestView(View):
                 old_status=old_status,
                 new_status='void request'
             )
-
-            if request.department == 3:
-                efs_code.status = 'pending'
-                efs_code.save()
-            else:
-                efs_code.status = 'voided'
-                efs_code.save()
             
-            # efs_code.status = 'pending' if request.department == 3 else 'voided'
-            # efs_code.save()
+            efs_code.status = 'pending' if request.department == 3 else 'voided'
+            efs_code.save()
 
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
