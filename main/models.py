@@ -12,7 +12,7 @@ class Department(models.Model):
     """
         management = 1 | maintenance = 2 | accounting = 3
     """
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
 
     def __str__(self) -> str:
         return self.name
@@ -26,7 +26,7 @@ class UserDepartment(models.Model):
 
 
 class Message(models.Model):
-    message = models.CharField(max_length=50)
+    message = models.CharField(max_length=500)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
@@ -34,10 +34,10 @@ class Message(models.Model):
 
 
 class Efs(models.Model):
-    code = models.CharField(max_length=20)
-    reference = models.CharField(max_length=20)
+    code = models.CharField(max_length=50)
+    reference = models.CharField(max_length=50)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=50, default='available')
+    status = models.CharField(max_length=500, default='available')
     date = models.DateTimeField(default=timezone.now())
 
     def __str__(self) -> str:
