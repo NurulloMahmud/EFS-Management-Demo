@@ -22,4 +22,6 @@ Installation
 
 
 This project is built for Logistics company that is based in US.  
-Main purpose of the project is to secure the way they work with EFS (Electronic Fund Source) and prevent misuse.
+Main purpose of the project is to secure the way they work with EFS (Electronic Fund Source) and prevent misuse.  
+Real project itself is currently deployed on Heroku with domain efs.smartfleetllc.com  
+In order to protect company's privacy, real project itself is in private repository.
