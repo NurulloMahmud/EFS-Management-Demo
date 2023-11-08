@@ -19,3 +19,7 @@ Installation
   (Windows)  
 - env\Scripts\activate
 - python3 manage.py runserver
+
+
+This project is built for Logistics company that is based in US.  
+Main purpose of the project is to secure the way they work with EFS (Electronic Fund Source) and prevent misuse.
