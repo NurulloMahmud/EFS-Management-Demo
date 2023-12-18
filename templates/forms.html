@@ -12,7 +12,7 @@
     {% csrf_token %}
     
     <label for="amount">Amount</label>
-    <input type="number" id="amount" name="amount" placeholder="How much are you giving ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" step="0.01" required max="{{ amount }}">
+    <input type="number" id="amount" name="amount" placeholder="How much are you giving ?" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" step="0.01" required max="{{ amount }}" value="{{ amount }}">
     
     <label for="reason">Reason</label>
     <input type="text" id="reason" name="reason" placeholder="This field is required!" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
